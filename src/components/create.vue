@@ -1,0 +1,46 @@
+<template>
+  <div>
+    <div class="p-5 bg-secondary text-white text-center">
+      <h1>Create Poll</h1>
+    </div>
+    <b-container>
+      <b-row  class="justify-content-lg-center">
+          <b-col lg="8">
+        <b-form class="p-5">
+            <p class="text-danger">{{errors}}</p>
+          <b-form-group label="Question :">
+            <b-form-input type="text" required placeholder="Enter Your Question" v-model="form.question"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Option 1 :">
+            <b-form-input type="text" required placeholder="Enter Option 1" v-model="form.opt1"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Option 2 :">
+            <b-form-input type="text" required placeholder="Enter Option 2" v-model="form.opt2"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Option 3 :">
+            <b-form-input type="text" required placeholder="Enter Option 3" v-model="form.opt3"></b-form-input>
+          </b-form-group>
+          <b-form-group label="Option 4 :">
+            <b-form-input type="text" required placeholder="Enter Option 4" v-model="form.opt4"></b-form-input>
+          </b-form-group>
+          <b-button type="submit" @click="submitFunction" variant="primary">Submit</b-button>
+        </b-form>
+          </b-col>
+      </b-row>
+    </b-container>
+  </div>
+</template>
+<script>
+import { mapState, mapActions} from "vuex"
+export default {
+    name:"create",
+    computed:{
+        ...mapState('pollData',["form","errors"])
+    },
+    methods:{
+        ...mapActions({
+            submitFunction: "pollData/submit"
+        })
+    }
+}
+</script>
