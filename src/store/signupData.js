@@ -6,7 +6,8 @@ const state = {
         password: "",
         role: "Enter Role"
     },
-    signUpError: ""
+    signUpError: "",
+    signupLoading: false
 }
 
 const actions = {
@@ -19,21 +20,23 @@ const actions = {
                 password: state.signup.password,
                 role: state.signup.role
             };
-            axios.post("https://secure-refuge-14993.herokuapp.com/add_user?username=admin&password=admin&role=admin", payload).then(response => {
+            state.signupLoading=true;
+            axios.post(`https://secure-refuge-14993.herokuapp.com/add_user?username=${state.signup.username}&password=${state.signup.password}&role=${state.signup.role}`, payload).then(response => {
                 if (response.status === 200) {
                     // eslint-disable-next-line
                     console.log(response, "signup");
-                    router.push("/");
+                    router.push("/login");
                     state.signup.username = "";
                     state.signup.password = "";
                     state.signup.role = "";
+                    state.loading = false;
+                    state.signupLoading=false;
                 }
             }).catch(function (error) {
                 // eslint-disable-next-line
                 console.log(error, "error");
                 state.signupErrors = "* Account already exists ";
             });
-
         }
     },
     routeSignup() {

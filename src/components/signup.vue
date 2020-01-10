@@ -9,15 +9,28 @@
           <b-form class="p-5">
             <p class="text-danger">{{signUpError}}</p>
             <b-form-group label="Username:">
-              <b-form-input type="text" required placeholder="Enter Username" v-model="signup.username"></b-form-input>
+              <b-form-input
+                type="text"
+                required
+                placeholder="Enter Username"
+                v-model="signup.username"
+              ></b-form-input>
             </b-form-group>
             <b-form-group label="Password">
-              <b-form-input type="password" required placeholder="Enter Password" v-model="signup.password"></b-form-input>
+              <b-form-input
+                type="password"
+                required
+                placeholder="Enter Password"
+                v-model="signup.password"
+              ></b-form-input>
             </b-form-group>
             <b-form-group>
               <b-form-select v-model="signup.role" :options="options"></b-form-select>
             </b-form-group>
-            <b-button type="submit" @click="add_user" variant="success">SignUp</b-button>
+            <b-button type="submit" @click="add_user" variant="info">
+              <b-spinner small v-if="signupLoading"></b-spinner>
+              <span v-if="!signupLoading">SignUp</span>
+            </b-button>
           </b-form>
         </b-col>
       </b-row>
@@ -30,14 +43,14 @@ export default {
   name: "signup",
   data() {
     return {
-      options: [ 
+      options: [
         { value: "admin", text: "Admin" },
         { value: "guest", text: "Guest" }
       ]
     };
   },
   computed: {
-    ...mapState("signupData", ["signup","signUpError"])
+    ...mapState("signupData", ["signup", "signUpError","signupLoading"]),
   },
   methods: {
     ...mapActions({

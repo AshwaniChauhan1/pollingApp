@@ -23,7 +23,7 @@
           <b-form-group label="Option 4 :">
             <b-form-input type="text" required placeholder="Enter Option 4" v-model="form.opt4"></b-form-input>
           </b-form-group>
-          <b-button type="submit" @click="submitFunction" variant="primary">Submit</b-button>
+          <b-button type="submit" @click="submitFunction" variant="info">Submit</b-button>
         </b-form>
           </b-col>
       </b-row>
