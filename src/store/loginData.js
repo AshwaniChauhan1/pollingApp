@@ -14,13 +14,8 @@ const actions = {
         if (state.login.username === "" || state.login.password === "") {
             state.loginError = "* Fill Required Details";
         } else {
-            var payload = {
-                username: state.login.username,
-                password: state.login.password,
-                role: state.login.role
-            };
             state.loginLoading = true;
-            axios.post(`https://secure-refuge-14993.herokuapp.com/login?username=${state.login.username}&password=${state.login.password}`, payload).then(response => {
+            axios.post(`https://secure-refuge-14993.herokuapp.com/login?username=${state.login.username}&password=${state.login.password}`).then(response => {
                 if (response.status === 200) {
                     router.push("/create");
                     state.login.username = "";

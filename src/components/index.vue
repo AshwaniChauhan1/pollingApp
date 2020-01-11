@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-navbar variant="info">
+    <b-navbar variant="info" class="shadow">
       <b-navbar-brand class="text-white" @click="openHome">
         <a>VUE</a>
       </b-navbar-brand>
