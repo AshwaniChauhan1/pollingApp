@@ -5,11 +5,14 @@
         <a>VUE</a>
       </b-navbar-brand>
       <b-navbar-nav>
-        <b-nav-item v-if="token !== ''">
+        <b-nav-item v-if="token !== ''&& loginRole==='admin'">
           <button class="btn btn-light" @click="openCreate">Create</button>
         </b-nav-item>
         <b-nav-item v-if="token !==''">
           <button class="btn btn-light" @click="openView">View</button>
+        </b-nav-item>
+        <b-nav-item v-if="token !==''">
+          <button class="btn btn-light" @click="openTake">Take</button>
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
@@ -28,7 +31,7 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "index",
   data() {
@@ -41,18 +44,22 @@ export default {
       this.token = localStorage.token;
     }
   },
-  updated(){
+  updated() {
     this.token = localStorage.token;
   },
   methods: {
     ...mapActions({
-      openView: "pollData/view",
-      openCreate: "pollData/create",
+      openTake: "pollData/routeTake",
+      openCreate: "pollData/routeCreate",
+      openView: "pollData/routeView",
       openHome: "pollData/index",
       openLogin: "loginData/routeLogin",
       openSignup: "signupData/routeSignup",
       userLogout: "loginData/logout"
     })
+  },
+  computed: {
+    ...mapState("loginData", ["loginRole"])
   }
 };
 </script>

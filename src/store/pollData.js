@@ -6,10 +6,24 @@ const state = {
     errors: "",
     pollData: [],
     editIndex: "",
-    modalTitle: true
+    optIndex: "",
+    modalTitle: true,
+    deleteOptModal: false
 }
 
 const actions = {
+    routeTake() {
+        router.push("/take")
+    },
+    routeCreate() {
+        router.push("/create")
+    },
+    routeView() {
+        router.push("/view")
+    },
+    index() {
+        router.push("/")
+    },
     create_poll() {
         if (state.form.question == "" || state.form.opt1 == "" || state.form.opt2 == "" || state.form.opt3 == "" || state.form.opt4 == "") {
             state.errors = "*Fill Required Details";
@@ -35,18 +49,6 @@ const actions = {
                 state.signupErrors = "* Account already exists ";
             });
         }
-    },
-    view() {
-        router.push("/view")
-    },
-    create() {
-        router.push("/create")
-    },
-    index() {
-        router.push("/")
-    },
-    login() {
-        router.push("/login")
     },
     getPoll() {
         axios
@@ -87,8 +89,8 @@ const actions = {
             console.log(error, "error");
         });
     },
-    delete_opt({ state, dispatch }, payload) {
-        axios.delete(`https://secure-refuge-14993.herokuapp.com/delete_poll_option?id=${state.pollData[payload.index]._id}&option_text=${state.pollData[payload.index].options[payload.indexs].option}`).then(response => {
+    delete_opt({ state, dispatch }) {
+        axios.delete(`https://secure-refuge-14993.herokuapp.com/delete_poll_option?id=${state.pollData[state.editIndex]._id}&option_text=${state.pollData[state.editIndex].options[state.optIndex].option}`).then(response => {
             if (response.status === 200) {
                 // eslint-disable-next-line
                 console.log(response, "delete opt");
@@ -121,11 +123,15 @@ const actions = {
         state.modalTitle = false;
         state.editIndex = index;
     },
+    openModal_deleteOpt({ state }, index) {
+        state.deleteOptModal = true;
+        state.editIndex = index;
+    },
     add_option({ state, dispatch }) {
         axios.post(`https://secure-refuge-14993.herokuapp.com/add_new_option?id=${state.pollData[state.editIndex]._id}&option_text=${state.form.opt1}`).then(response => {
             if (response.status === 200) {
                 // eslint-disable-next-line
-                console.log(response, "update title");
+                console.log(response, "add option");
                 dispatch('getPoll');
                 state.form.opt1 = "";
             }
@@ -134,9 +140,15 @@ const actions = {
             console.log(error, "error");
         });
     },
-    clear_modal(){
+    select_radio({ state }, optIndexs) {
+        state.optIndex = optIndexs;
+    },
+    clear_modal() {
+        state.form.question = "";
         state.form.opt1 = "";
+        state.deleteOptModal = false;
     }
+
 }
 
 

@@ -20,22 +20,26 @@ const actions = {
                 password: state.signup.password,
                 role: state.signup.role
             };
-            state.signupLoading=true;
+            state.signupLoading = true;
             axios.post(`https://secure-refuge-14993.herokuapp.com/add_user?username=${state.signup.username}&password=${state.signup.password}&role=${state.signup.role}`, payload).then(response => {
-                if (response.status === 200) {
+                if (response.status === 200 && response.data.error === 0) {
                     // eslint-disable-next-line
                     console.log(response, "signup");
                     router.push("/login");
-                    state.signup.username = "";
-                    state.signup.password = "";
-                    state.signup.role = "";
-                    state.loading = false;
-                    state.signupLoading=false;
+                    state.signUpError=""
                 }
+                if (response.status === 200 && response.data.error === 1) {
+                    state.signUpError = "* Account already exists ";
+                }
+                state.signup.username = "";
+                state.signup.password = "";
+                state.signup.role = "";
+                state.signupLoading = false;
+                
             }).catch(function (error) {
                 // eslint-disable-next-line
                 console.log(error, "error");
-                state.signupErrors = "* Account already exists ";
+
             });
         }
     },
