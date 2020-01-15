@@ -50,7 +50,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("signupData", ["signup", "signUpError","signupLoading"]),
+    ...mapState("signupData", ["signup", "signUpError", "signupLoading"])
   },
   methods: {
     ...mapActions({

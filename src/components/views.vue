@@ -4,19 +4,22 @@
       <h1>View Poll</h1>
     </div>
     <b-container class="p-5">
-      <b-row class="justify-content-lg-center">
-        <b-col lg="8" class="mb-5 shadow p-3" v-for="(poll,index) in pollData" :key="index">
+       <p class="text-danger">{{viewError}}</p>
+      <b-row class="justify-content-lg-center" >
+        <b-col lg="8" class="mb-5 shadow p-3" v-for="(poll,index) in pollData" :key="index">  
           <p>
             Title :
             <span class="text-danger">{{poll.title}}</span>
           </p>
           <p>Options:</p>
           <div
-            class="py-2"
+            class="py-2 d-flex justify-content-between"
             :name="index.toString()"
             v-for="(option,indexs) in poll.options"
             :key="indexs"
-          >{{setValue(indexs)}}) {{option.option}}</div>
+          ><div><p>{{setValue(indexs)}}) {{option.option}}</p> </div>
+          <div class="px-5"><p><span class="text-danger">vote : </span>{{option.vote}}</p></div>
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -43,7 +46,7 @@ export default {
   },
   
   computed: {
-    ...mapState("pollData", ["pollData","loginRole"])
+    ...mapState("pollData", ["pollData","loginRole","viewError"])
   }
 };
 </script>

@@ -23,17 +23,19 @@
                 class="py-2"
               >{{option.option}}</b-form-radio>
             </div>
-            <b-button class="mt-3" @click="deleteOpt">Delete</b-button>
+            <b-button variant="info" class="mt-3" @click="deleteOpt">Delete</b-button>
           </div>
         </b-form>
         <div v-if="!deleteOptModal">
           <b-button
             v-if="modalTitle"
+            variant="info"
             class="mt-3"
             @click="update();$bvModal.hide('bv-modal-title');"
           >Update</b-button>
           <b-button
             v-if="!modalTitle"
+            variant="info"
             class="mt-3"
             @click="addOption();$bvModal.hide('bv-modal-title');"
           >Add</b-button>
@@ -44,6 +46,7 @@
       <h1>Take Poll</h1>
     </div>
     <b-container class="p-5">
+      <p class="text-danger text-center">{{takeError}}</p>
       <b-row class="justify-content-lg-center">
         <b-col lg="8" class="mb-5 shadow p-3" v-for="(poll,index) in pollData" :key="index">
           <p>
@@ -63,29 +66,37 @@
               <b-form-radio
                 class="py-2"
                 :name="index.toString()"
-                value="rta"
+                value="options"
                 v-for="(option,indexs) in poll.options"
                 :key="indexs"
-                @change="clicked({index: index,indexs:indexs})"
+                :disabled="disabled(poll.title)"
+                @change="setVote({index: index,indexs:indexs})"
               >{{setValue(indexs)}}) {{option.option}}</b-form-radio>
             </div>
           </b-form-group>
           <hr class="mt-0" />
           <div v-if="loginRoles==='admin'">
-            <b-link @click="openModalTitle(index);$bvModal.show('bv-modal-title');">Edit Title</b-link>
-            <b-link
+            <b-button
+              variant="outline-info"
+              @click="openModalTitle(index);$bvModal.show('bv-modal-title')"
+            >Edit Title</b-button>
+            <b-button
+              variant="outline-info"
               class="ml-4"
-              @click="openModalOpt(index);$bvModal.show('bv-modal-title');"
-            >New Option</b-link>
-            <b-link
+              @click="openModalOpt(index);$bvModal.show('bv-modal-title')"
+            >New Option</b-button>
+            <b-button
+              variant="outline-info"
               class="ml-4"
-              @click="openModalDeleteOpt(index);$bvModal.show('bv-modal-title');"
-            >Delete Option</b-link>
-            <b-link class="ml-4" @click="deletePoll(index)">Delete Poll</b-link>
+              @click="openModalDeleteOpt(index);$bvModal.show('bv-modal-title')"
+            >Delete Option</b-button>
+            <b-button
+              variant="outline-info"
+              Button
+              class="ml-4"
+              @click="deletePoll(index)"
+            >Delete Poll</b-button>
           </div>
-        </b-col>
-        <b-col lg="8" class="px-0">
-          <b-button type="submit" variant="info">Submit</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -95,14 +106,16 @@
 import { mapActions, mapState } from "vuex";
 export default {
   name: "take",
-  data(){
-    return{
-      loginRoles:""
-    }
+  data() {
+    return {
+      loginRoles: "",
+      votes: []
+    };
   },
   mounted() {
     this.viewPoll();
-    this.loginRoles=localStorage.loginRole;
+    this.loginRoles = localStorage.loginRole;
+    this.voteLocalStorage();
   },
   methods: {
     setValue(index) {
@@ -114,7 +127,7 @@ export default {
     },
     ...mapActions({
       viewPoll: "pollData/getPoll",
-      clicked: "pollData/click",
+      vote: "pollData/vote",
       deletePoll: "pollData/delete_poll",
       deleteOpt: "pollData/delete_opt",
       update: "pollData/updateTitle",
@@ -124,7 +137,31 @@ export default {
       addOption: "pollData/add_option",
       clearModal: "pollData/clear_modal",
       selectRadio: "pollData/select_radio"
-    })
+    }),
+    voteLocalStorage() {
+      if (localStorage.getItem("vote")) {
+        this.votes = JSON.parse(localStorage.getItem("vote"));
+      } else {
+        localStorage.setItem("vote", JSON.stringify(this.arrayToset));
+      }
+    },
+    async setVote(payload) {
+      let response = await this.vote(payload);
+      if (response === true) {
+        this.voteLocalStorage();
+      }
+    },
+    disabled(title) {
+      if (this.votes.length !== null) {
+        for (let i = 0; i < this.votes.length; i++) {
+          if (this.votes[i].title === title) {
+            return true;
+          }
+        }
+      } else {
+        return false;
+      }
+    }
   },
   computed: {
     ...mapState("pollData", [
@@ -132,7 +169,10 @@ export default {
       "form",
       "modalTitle",
       "deleteOptModal",
-      "editIndex"
+      "editIndex",
+      "voteArr",
+      "arrayToset",
+      "takeError"
     ]),
     ...mapState("loginData", ["loginRole"])
   }

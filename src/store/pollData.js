@@ -3,12 +3,17 @@ import axios from "axios";
 const state = {
     form: { question: "", opt1: "", opt2: "", opt3: "", opt4: "" },
     poll: {},
-    errors: "",
     pollData: [],
     editIndex: "",
     optIndex: "",
     modalTitle: true,
-    deleteOptModal: false
+    deleteOptModal: false,
+    voteArr: [],
+    voteObj: {},
+    arrayToset: [],
+    takeError: "",
+    viewError: "",
+    createError: ""
 }
 
 const actions = {
@@ -37,16 +42,13 @@ const actions = {
             }
             axios.post(`https://secure-refuge-14993.herokuapp.com/add_poll?title=${payload.title}&options=${payload.opt1}____${payload.opt2}____${payload.opt3}____${payload.opt4}`, payload).then(response => {
                 if (response.status === 200) {
-                    // eslint-disable-next-line
-                    console.log(response, "create");
                     router.push("/view");
                     state.form = { question: "", opt1: "", opt2: "", opt3: "", opt4: "" };
-                    state.errors = "";
+                    state.createError = "";
                 }
             }).catch(function (error) {
-                // eslint-disable-next-line
-                console.log(error, "error");
-                state.signupErrors = "* Account already exists ";
+                state.createError = error;
+
             });
         }
     },
@@ -55,63 +57,75 @@ const actions = {
             .get("https://secure-refuge-14993.herokuapp.com/list_polls")
             .then(response => {
                 state.pollData = response.data.data;
+                state.takeError = "";
+                state.viewError = "";
             })
             .catch(function (error) {
-                // eslint-disable-next-line
-                console.log(error, "error");
+                state.takeError = error;
+                state.viewError = error;
             });
     },
-    click({ state }, payload) {
+    async vote({ state, dispatch }, payload) {
+        let responseToSend = null
         let axiosConfig = {
             headers: {
                 'access_token': localStorage.token
             }
         };
-        axios.post(`https://secure-refuge-14993.herokuapp.com/do_vote?id=${state.pollData[payload.index]._id}&option_text=${state.pollData[payload.index].options[payload.indexs].option}`, payload, axiosConfig).then(response => {
+        await axios.post(`https://secure-refuge-14993.herokuapp.com/do_vote?id=${state.pollData[payload.index]._id}&option_text=${state.pollData[payload.index].options[payload.indexs].option}`, payload, axiosConfig).then(response => {
             if (response.status === 200) {
-                // eslint-disable-next-line
-                console.log(state.pollData[payload.index].options[payload.indexs].vote);
+                state.voteObj = {
+                    id: state.pollData[payload.index]._id,
+                    title: state.pollData[payload.index].title
+                };
+                responseToSend = true
+                dispatch('getPoll');
+
+                if (localStorage.getItem('vote')) {
+                    var arrayFromLocal = JSON.parse(localStorage.getItem('vote'));
+                    arrayFromLocal.push(state.voteObj);
+                    localStorage.setItem('vote', JSON.stringify(arrayFromLocal));
+                } else {
+                    state.arrayToset.push(state.voteObj);
+                    localStorage.setItem('vote', JSON.stringify(state.arrayToset));
+                }
+                state.takeError = "";
             }
         }).catch(function (error) {
-            // eslint-disable-next-line
-            console.log(error, "error");
+            responseToSend = false
+            state.takeError = error;
         });
+        return responseToSend
     },
     delete_poll({ state, dispatch }, index) {
         axios.delete(`https://secure-refuge-14993.herokuapp.com/delete_poll?id=${state.pollData[index]._id}`).then(response => {
             if (response.status === 200) {
-                // eslint-disable-next-line
-                console.log(response, "delete Poll");
                 dispatch('getPoll');
+                state.takeError = "";
             }
         }).catch(function (error) {
-            // eslint-disable-next-line
-            console.log(error, "error");
+            state.takeError = error;
         });
     },
     delete_opt({ state, dispatch }) {
         axios.delete(`https://secure-refuge-14993.herokuapp.com/delete_poll_option?id=${state.pollData[state.editIndex]._id}&option_text=${state.pollData[state.editIndex].options[state.optIndex].option}`).then(response => {
             if (response.status === 200) {
-                // eslint-disable-next-line
-                console.log(response, "delete opt");
                 dispatch('getPoll');
+                state.takeError = "";
             }
         }).catch(function (error) {
-            // eslint-disable-next-line
-            console.log(error, "error");
+            state.takeError = error;
         });
     },
     updateTitle({ state, dispatch }) {
         axios.post(`https://secure-refuge-14993.herokuapp.com/update_poll_title?id=${state.pollData[state.editIndex]._id}&title=${state.form.question}`).then(response => {
             if (response.status === 200) {
-                // eslint-disable-next-line
-                console.log(response, "update title");
                 dispatch('getPoll');
                 state.form.question = "";
+                state.takeError = "";
             }
         }).catch(function (error) {
-            // eslint-disable-next-line
-            console.log(error, "error");
+            state.takeError = error;
         });
     },
     openModal_title({ state }, index) {
@@ -130,14 +144,12 @@ const actions = {
     add_option({ state, dispatch }) {
         axios.post(`https://secure-refuge-14993.herokuapp.com/add_new_option?id=${state.pollData[state.editIndex]._id}&option_text=${state.form.opt1}`).then(response => {
             if (response.status === 200) {
-                // eslint-disable-next-line
-                console.log(response, "add option");
                 dispatch('getPoll');
                 state.form.opt1 = "";
+                state.takeError = "";
             }
         }).catch(function (error) {
-            // eslint-disable-next-line
-            console.log(error, "error");
+            state.takeError = error;
         });
     },
     select_radio({ state }, optIndexs) {

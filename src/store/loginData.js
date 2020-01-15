@@ -39,9 +39,7 @@ const actions = {
                     state.loginLoading = false;
                 }
             }).catch(function (error) {
-                // eslint-disable-next-line
-                console.log(error, "error");
-
+                state.loginError = error;
             });
         }
     },
@@ -50,6 +48,7 @@ const actions = {
     },
     logout() {
         localStorage.token = "";
+        localStorage.vote = "";
         router.push("/");
     }
 }
