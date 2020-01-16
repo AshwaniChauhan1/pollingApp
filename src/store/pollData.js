@@ -56,7 +56,7 @@ const actions = {
         axios
             .get("https://secure-refuge-14993.herokuapp.com/list_polls")
             .then(response => {
-                state.pollData = response.data.data;
+                state.pollData = response.data.data.reverse();
                 state.takeError = "";
                 state.viewError = "";
             })

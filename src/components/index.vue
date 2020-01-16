@@ -5,16 +5,16 @@
         <a>VUE</a>
       </b-navbar-brand>
       <b-navbar-nav v-if="token !==''">
-        <b-nav-item v-if="loginRole==='admin'">
+        <b-nav-item v-if="loginRoles==='admin'">
           <button class="btn btn-light" @click="openCreate">Create</button>
         </b-nav-item>
         <b-nav-item>
           <button class="btn btn-light" @click="openView">View</button>
         </b-nav-item>
-        <b-nav-item v-if="loginRole==='guest'">
+        <b-nav-item v-if="loginRoles==='guest'">
           <button class="btn btn-light" @click="openTake">Take</button>
         </b-nav-item>
-        <b-nav-item v-if="loginRole==='admin'">
+        <b-nav-item v-if="loginRoles==='admin'">
           <button class="btn btn-light" @click="openTake">Edit</button>
         </b-nav-item>
       </b-navbar-nav>
@@ -34,12 +34,13 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions } from "vuex";
 export default {
   name: "index",
   data() {
     return {
-      token: ""
+      token: "",
+      loginRoles: ""
     };
   },
   mounted() {
@@ -51,6 +52,7 @@ export default {
   },
   updated() {
     this.token = localStorage.token;
+    this.loginRoles = localStorage.loginRole;
   },
   methods: {
     ...mapActions({
@@ -62,9 +64,6 @@ export default {
       openSignup: "signupData/routeSignup",
       userLogout: "loginData/logout"
     })
-  },
-  computed: {
-    ...mapState("loginData", ["loginRole"])
   }
 };
 </script>

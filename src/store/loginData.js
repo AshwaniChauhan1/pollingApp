@@ -11,7 +11,7 @@ const state = {
 }
 
 const actions = {
-    loginUser() {
+    loginUser({ dispatch }) {
         if (state.login.username === "" || state.login.password === "") {
             state.loginError = "* Fill Required Details";
         } else {
@@ -24,12 +24,7 @@ const actions = {
                     state.loginError = "";
                     localStorage.token = response.data.token;
                     state.loginLoading = false;
-                    var base64Url = localStorage.token.split('.')[1];
-                    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                    }).join(''));
-                    state.loginRole = JSON.parse(jsonPayload).role;
+                    dispatch('decodeToken');
                     localStorage.loginRole = state.loginRole;
                 }
                 if (response.status === 200 && response.data.error === 1) {
@@ -43,6 +38,14 @@ const actions = {
             });
         }
     },
+    decodeToken() {
+        var base64Url = localStorage.token.split('.')[1];
+        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        state.loginRole = JSON.parse(jsonPayload).role;
+    },
     routeLogin() {
         state.loginError = "";
         router.push("/login");
@@ -50,6 +53,7 @@ const actions = {
     logout() {
         localStorage.token = "";
         localStorage.vote = "";
+        localStorage.loginRole = "";
         router.push("/");
     }
 }
