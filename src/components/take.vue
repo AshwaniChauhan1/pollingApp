@@ -129,7 +129,7 @@ export default {
       openModalDeleteOpt: "pollData/openModal_deleteOpt",
       addOption: "pollData/add_option",
       clearModal: "pollData/clear_modal",
-      selectRadio: "pollData/select_radio",
+      selectRadio: "pollData/select_radio"
     }),
     voteLocalStorage() {
       if (localStorage.getItem("vote")) {
