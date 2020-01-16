@@ -44,6 +44,7 @@ const actions = {
         }
     },
     routeLogin() {
+        state.loginError = "";
         router.push("/login");
     },
     logout() {

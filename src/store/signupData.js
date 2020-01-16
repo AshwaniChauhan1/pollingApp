@@ -4,7 +4,7 @@ const state = {
     signup: {
         username: "",
         password: "",
-        role: "Enter Role"
+        role: null
     },
     signUpError: "",
     signupLoading: false
@@ -12,7 +12,7 @@ const state = {
 
 const actions = {
     addUser() {
-        if (state.signup.username == "" || state.signup.password == "" || state.signup.role == "") {
+        if (state.signup.username == "" || state.signup.password == "" || state.signup.role == null) {
             state.signUpError = "* Fill Required Details";
         } else {
             var payload = {
@@ -31,9 +31,8 @@ const actions = {
                 }
                 state.signup.username = "";
                 state.signup.password = "";
-                state.signup.role = "";
+                state.signup.role = null;
                 state.signupLoading = false;
-
             }).catch(function (error) {
                 state.signUpError = error;
 
@@ -41,6 +40,7 @@ const actions = {
         }
     },
     routeSignup() {
+        state.signUpError = "";
         router.push("/signup");
     }
 }

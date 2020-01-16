@@ -48,7 +48,7 @@
     <b-container class="p-5">
       <p class="text-danger text-center">{{takeError}}</p>
       <b-row class="justify-content-lg-center">
-        <b-col lg="8" class="mb-5 shadow p-3" v-for="(poll,index) in pollData" :key="index">
+        <b-col lg="8" class="mb-5 shadow px-3 py-3" v-for="(poll,index) in pollData" :key="index">
           <p>
             Title :
             <span class="text-danger">{{poll.title}}</span>
@@ -75,27 +75,20 @@
             </div>
           </b-form-group>
           <hr class="mt-0" />
-          <div v-if="loginRoles==='admin'">
+          <div v-if="loginRoles==='admin'" class="d-flex justify-content-between">
             <b-button
-              variant="outline-info"
+              variant="outline-primary"
               @click="openModalTitle(index);$bvModal.show('bv-modal-title')"
             >Edit Title</b-button>
             <b-button
-              variant="outline-info"
-              class="ml-4"
+              variant="outline-primary"
               @click="openModalOpt(index);$bvModal.show('bv-modal-title')"
             >New Option</b-button>
             <b-button
-              variant="outline-info"
-              class="ml-4"
+              variant="outline-danger"
               @click="openModalDeleteOpt(index);$bvModal.show('bv-modal-title')"
             >Delete Option</b-button>
-            <b-button
-              variant="outline-info"
-              Button
-              class="ml-4"
-              @click="deletePoll(index)"
-            >Delete Poll</b-button>
+            <b-button variant="outline-danger" Button @click="deletePoll(index)">Delete Poll</b-button>
           </div>
         </b-col>
       </b-row>

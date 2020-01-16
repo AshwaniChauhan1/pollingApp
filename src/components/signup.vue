@@ -44,6 +44,7 @@ export default {
   data() {
     return {
       options: [
+        { value: null, text: "Role" },
         { value: "admin", text: "Admin" },
         { value: "guest", text: "Guest" }
       ]
