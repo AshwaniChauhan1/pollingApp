@@ -48,7 +48,6 @@ const actions = {
                 }
             }).catch(function (error) {
                 state.createError = error;
-
             });
         }
     },
@@ -72,7 +71,7 @@ const actions = {
                 'access_token': localStorage.token
             }
         };
-        await axios.post(`https://secure-refuge-14993.herokuapp.com/do_vote?id=${state.pollData[payload.index]._id}&option_text=${state.pollData[payload.index].options[payload.indexs].option}`, payload, axiosConfig).then(response => {
+        await axios.post(`https://secure-refuge-14993.herokuapp.com/do_vote?id=${state.pollData[payload.index]._id}&option_text=${state.pollData[payload.index].options[payload.optIndex].option}`, payload, axiosConfig).then(response => {
             if (response.status === 200) {
                 state.voteObj = {
                     id: state.pollData[payload.index]._id,
@@ -80,7 +79,6 @@ const actions = {
                 };
                 responseToSend = true
                 dispatch('getPoll');
-
                 if (localStorage.getItem('vote')) {
                     var arrayFromLocal = JSON.parse(localStorage.getItem('vote'));
                     arrayFromLocal.push(state.voteObj);

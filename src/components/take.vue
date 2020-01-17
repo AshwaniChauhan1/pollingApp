@@ -58,20 +58,20 @@
               <div
                 class="py-2"
                 :name="index.toString()"
-                v-for="(option,indexs) in poll.options"
-                :key="indexs"
-              >{{setValue(indexs)}}) {{option.option}}</div>
+                v-for="(option,optIndex) in poll.options"
+                :key="optIndex"
+              >{{setValue(optIndex)}}) {{option.option}}</div>
             </div>
             <div v-if="loginRoles==='guest'">
               <b-form-radio
                 class="py-2"
                 :name="index.toString()"
                 value="options"
-                v-for="(option,indexs) in poll.options"
-                :key="indexs"
+                v-for="(option,optIndex) in poll.options"
+                :key="optIndex"
                 :disabled="disabled(poll.title)"
-                @change="setVote({index: index,indexs:indexs})"
-              >{{setValue(indexs)}}) {{option.option}}</b-form-radio>
+                @change="setVote({index: index,optIndex:optIndex})"
+              >{{setValue(optIndex)}}) {{option.option}}</b-form-radio>
             </div>
           </b-form-group>
           <hr class="mt-0" />

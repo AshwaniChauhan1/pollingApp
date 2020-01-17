@@ -11,15 +11,12 @@ Vue.use(Router)
 const router = new Router({
   mode: 'hash',
   routes: [
-    { 'path': '/', component: home, },
-    { 'path': '/create', component: create, },
-    { 'path': '/view', component: views, },
-    { 'path': '/take', component: take, },
-    { 'path': '/signup', component: signup, },
-    {
-      path: '/login',
-      component: login
-    }
+    { path: '/', component: home, },
+    { path: '/create', component: create, },
+    { path: '/view', component: views, },
+    { path: '/take', component: take, },
+    { path: '/signup', component: signup, },
+    { path: '/login', component: login }
   ]
 
 })

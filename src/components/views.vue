@@ -15,11 +15,11 @@
           <div
             class="py-2 d-flex justify-content-between"
             :name="index.toString()"
-            v-for="(option,indexs) in poll.options"
-            :key="indexs"
+            v-for="(option,optIndex) in poll.options"
+            :key="optIndex"
           >
             <div>
-              <p>{{setValue(indexs)}}) {{option.option}}</p>
+              <p>{{setValue(optIndex)}}) {{option.option}}</p>
             </div>
             <div class="px-5">
               <p>
