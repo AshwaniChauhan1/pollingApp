@@ -18,14 +18,11 @@ const router = new Router({
     { path: '/signup', component: signup, },
     { path: '/login', component: login }
   ]
-
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login' && localStorage.getItem('token') === "") {
+  if (to.path === '/' && localStorage.getItem('token') === "") {
     next({ path: "/login" });
-  } if (to.path === '/login' && localStorage.getItem('token') !== '') {
-    next({ path: '/take' })
   } else {
     next()
   }

@@ -7,10 +7,14 @@
       <p class="text-danger">{{viewError}}</p>
       <b-row class="justify-content-lg-center">
         <b-col lg="8" class="mb-5 shadow p-3" v-for="(poll,index) in pollData" :key="index">
-          <p>
-            Title :
-            <span class="text-danger">{{poll.title}}</span>
-          </p>
+          <div class="d-flex pt-2 pb-4">
+            <div class="mr-1">
+              <span>Title:</span>
+            </div>
+            <div>
+              <span class="text-danger text-break">{{poll.title}}</span>
+            </div>
+          </div>
           <p>Options:</p>
           <div
             class="py-2 d-flex justify-content-between"
@@ -18,14 +22,15 @@
             v-for="(option,optIndex) in poll.options"
             :key="optIndex"
           >
-            <div>
-              <p>{{setValue(optIndex)}}) {{option.option}}</p>
+            <div class="d-flex">
+              <div class="mr-1">{{setValue(optIndex)}})</div>
+              <div>
+                <span class="text-break">{{option.option}}</span>
+              </div>
             </div>
-            <div class="px-5">
-              <p>
-                <span class="text-danger">vote :</span>
-                {{option.vote}}
-              </p>
+            <div class="px-3">
+              <span class="text-danger text-nowrap">vote :</span>
+              <span>{{option.vote}}</span>
             </div>
           </div>
         </b-col>
@@ -46,7 +51,6 @@ export default {
       if (index === 1) return "b";
       if (index === 2) return "c";
       if (index === 3) return "d";
-      if (index === 4) return "e";
     },
     ...mapActions({
       GetPoll: "pollData/getPoll"

@@ -9,7 +9,6 @@ const state = {
     loginLoading: false,
     loginRole: ""
 }
-
 const actions = {
     loginUser({ dispatch }) {
         if (state.login.username === "" || state.login.password === "") {

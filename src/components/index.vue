@@ -1,34 +1,37 @@
 <template>
   <div>
-    <b-navbar variant="info" class="shadow">
+    <b-navbar toggleable="md" variant="info" class="shadow d-flex flex-wrap">
       <b-navbar-brand class="text-white" @click="openHome">
         <a>VUE</a>
       </b-navbar-brand>
-      <b-navbar-nav v-if="token !==''">
-        <b-nav-item v-if="loginRoles==='admin'">
-          <button class="btn btn-light" @click="openCreate">Create</button>
-        </b-nav-item>
-        <b-nav-item>
-          <button class="btn btn-light" @click="openView">View</button>
-        </b-nav-item>
-        <b-nav-item v-if="loginRoles==='guest'">
-          <button class="btn btn-light" @click="openTake">Take</button>
-        </b-nav-item>
-        <b-nav-item v-if="loginRoles==='admin'">
-          <button class="btn btn-light" @click="openTake">Edit</button>
-        </b-nav-item>
-      </b-navbar-nav>
-      <b-navbar-nav class="ml-auto">
-        <b-nav-item v-if="token=='' && this.$route.path.indexOf('/login')">
-          <button class="btn btn-dark" @click="openLogin">LogIn</button>
-        </b-nav-item>
-        <b-nav-item v-if="token !==''">
-          <button class="btn btn-dark" @click="userLogout">LogOut</button>
-        </b-nav-item>
-        <b-nav-item v-if="token=='' && this.$route.path.indexOf('/signup')">
-          <button class="btn btn-dark" @click="openSignup">SignUp</button>
-        </b-nav-item>
-      </b-navbar-nav>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav v-if="token !==''" class>
+          <b-nav-item v-if="loginRoles==='admin'">
+            <button class="btn btn-light" @click="openCreate">Create</button>
+          </b-nav-item>
+          <b-nav-item>
+            <button class="btn btn-light" @click="openView">View</button>
+          </b-nav-item>
+          <b-nav-item v-if="loginRoles==='guest'">
+            <button class="btn btn-light" @click="openTake">Take</button>
+          </b-nav-item>
+          <b-nav-item v-if="loginRoles==='admin'">
+            <button class="btn btn-light" @click="openTake">Edit</button>
+          </b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-nav-item v-if="token=='' && this.$route.path.indexOf('/login')">
+            <button class="btn btn-dark" @click="openLogin">LogIn</button>
+          </b-nav-item>
+          <b-nav-item v-if="token !==''">
+            <button class="btn btn-dark" @click="userLogout">LogOut</button>
+          </b-nav-item>
+          <b-nav-item v-if="token=='' && this.$route.path.indexOf('/signup')">
+            <button class="btn btn-dark" @click="openSignup">SignUp</button>
+          </b-nav-item>
+        </b-navbar-nav>
+      </b-collapse>
     </b-navbar>
     <router-view></router-view>
   </div>
