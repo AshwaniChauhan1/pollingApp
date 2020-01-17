@@ -53,7 +53,7 @@ const actions = {
         localStorage.token = "";
         localStorage.vote = "";
         localStorage.loginRole = "";
-        router.push("/");
+        router.push("/login");
     }
 }
 
