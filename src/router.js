@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import index from './components/index.vue'
+import home from './components/home.vue'
 import create from './components/create.vue'
 import views from './components/views.vue'
 import take from './components/take.vue'
@@ -11,16 +11,11 @@ Vue.use(Router)
 const router = new Router({
   mode: 'hash',
   routes: [
-    {
-      'path': '/',
-      component: index,
-      children: [
-        { 'path': '/create', component: create, },
-        { 'path': '/view', component: views, },
-        { 'path': '/take', component: take, },
-        { 'path': '/signup', component: signup, },
-      ]
-    },
+    { 'path': '/', component: home, },
+    { 'path': '/create', component: create, },
+    { 'path': '/view', component: views, },
+    { 'path': '/take', component: take, },
+    { 'path': '/signup', component: signup, },
     {
       path: '/login',
       component: login
