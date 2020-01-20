@@ -108,24 +108,24 @@
             </div>
           </b-form-group>
           <hr class="mt-0" />
-          <div v-if="loginRoles==='admin'" class="d-flex justify-content-end">
+          <div v-if="loginRoles==='admin'" class="d-flex justify-content-end flex-wrap">
             <b-button
               variant="outline-primary"
               @click="openModalTitle(index);$bvModal.show('bv-modal-title')"
-              class="mx-2"
+              class="m-2"
             >Edit Title</b-button>
             <b-button
               variant="outline-primary"
               @click="openModalOpt(index);$bvModal.show('bv-modal-title')"
-              class="mx-2"
+              class="m-2"
               v-if="poll.options.length <4"
             >New Option</b-button>
             <b-button
               variant="outline-danger"
               @click="openModalDeleteOpt(index);$bvModal.show('bv-modal-title')"
-              class="mx-2"
+              class="m-2"
             >Delete Option</b-button>
-            <b-button variant="outline-danger" Button @click="deletePoll(index)">
+            <b-button variant="outline-danger" Button @click="deletePoll(index)"  class="m-2">
               <b-spinner small v-if="deletePollLoading"></b-spinner>
               <span v-if="!deletePollLoading">Delete Poll</span>
             </b-button>
