@@ -11,7 +11,7 @@ const state = {
 }
 
 const actions = {
-    addUser() {
+    async addUser() {
         if (state.signup.username == "" || state.signup.password == "" || state.signup.role == null) {
             state.signUpError = "* Fill Required Details";
         } else {
@@ -21,7 +21,7 @@ const actions = {
                 role: state.signup.role
             };
             state.signupLoading = true;
-            axios.post(`https://secure-refuge-14993.herokuapp.com/add_user?username=${state.signup.username}&password=${state.signup.password}&role=${state.signup.role}`, payload).then(response => {
+            await axios.post(`https://secure-refuge-14993.herokuapp.com/add_user?username=${state.signup.username}&password=${state.signup.password}&role=${state.signup.role}`, payload).then(response => {
                 if (response.status === 200 && response.data.error === 0) {
                     router.push("/login");
                     state.signUpError = ""
@@ -32,14 +32,15 @@ const actions = {
                 state.signup.username = "";
                 state.signup.password = "";
                 state.signup.role = null;
-                state.signupLoading = false;
             }).catch(function (error) {
                 state.signUpError = error;
-
             });
+            state.signupLoading = false;
         }
     },
     routeSignup() {
+        state.signup.username = "";
+        state.signup.password = "";
         state.signUpError = "";
         router.push("/signup");
     }

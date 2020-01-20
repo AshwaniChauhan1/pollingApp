@@ -10,31 +10,28 @@ const state = {
     loginRole: ""
 }
 const actions = {
-    loginUser({ dispatch }) {
+    async loginUser({ dispatch }) {
         if (state.login.username === "" || state.login.password === "") {
             state.loginError = "* Fill Required Details";
         } else {
             state.loginLoading = true;
-            axios.post(`https://secure-refuge-14993.herokuapp.com/login?username=${state.login.username}&password=${state.login.password}`).then(response => {
+            await axios.post(`https://secure-refuge-14993.herokuapp.com/login?username=${state.login.username}&password=${state.login.password}`).then(response => {
                 if (response.status === 200 && response.data.error === 0) {
                     router.push("/take");
-                    state.login.username = "";
-                    state.login.password = "";
                     state.loginError = "";
                     localStorage.token = response.data.token;
-                    state.loginLoading = false;
                     dispatch('decodeToken');
                     localStorage.loginRole = state.loginRole;
                 }
                 if (response.status === 200 && response.data.error === 1) {
                     state.loginError = "* User not exists ";
-                    state.login.username = "";
-                    state.login.password = "";
-                    state.loginLoading = false;
                 }
+                state.login.username = "";
+                state.login.password = "";
             }).catch(function (error) {
                 state.loginError = error;
             });
+            state.loginLoading = false;
         }
     },
     decodeToken() {

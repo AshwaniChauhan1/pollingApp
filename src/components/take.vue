@@ -125,7 +125,7 @@
               @click="openModalDeleteOpt(index);$bvModal.show('bv-modal-title')"
               class="m-2"
             >Delete Option</b-button>
-            <b-button variant="outline-danger" Button @click="deletePoll(index)"  class="m-2">
+            <b-button variant="outline-danger" Button @click="deletePoll(index)" class="m-2">
               <b-spinner small v-if="deletePollLoading"></b-spinner>
               <span v-if="!deletePollLoading">Delete Poll</span>
             </b-button>
