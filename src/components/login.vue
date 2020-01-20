@@ -6,7 +6,7 @@
     <b-container>
       <b-row class="justify-content-lg-center">
         <b-col lg="6">
-          <b-form class="p-5" @submit.prevent >
+          <b-form class="p-5" @submit.prevent>
             <p class="text-danger">{{loginError}}</p>
             <b-form-group label="Username:">
               <b-form-input
@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style scoped>
-b-button{
-  width:500px;
+b-button {
+  width: 500px;
 }
 </style>

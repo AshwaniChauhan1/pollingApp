@@ -1,12 +1,20 @@
 <template>
   <div>
-    <b-modal ref="modal-title" id="bv-modal-title" hide-footer @hide="clearModal">
+    <b-modal
+      ref="modal-title"
+      id="bv-modal-title"
+      v-model="ModalShow"
+      hide-footer
+      @hide="clearModal(false)"
+    >
       <template v-slot>
         <b-form v-on:submit.prevent>
+          <p class="text-danger">{{modalError}}</p>
+          <p></p>
           <div v-if="!deleteOptModal">
             <b-form-group v-if="modalTitle" label="Title :">
               <b-form-input
-                v-on:keyup.enter="update();$bvModal.hide('bv-modal-title');"
+                v-on:keyup.enter="update"
                 type="text"
                 required
                 placeholder="Enter Title"
@@ -15,9 +23,8 @@
             </b-form-group>
             <b-form-group v-if="!modalTitle" label="Option :">
               <b-form-input
-                v-on:keyup.enter="addOption();$bvModal.hide('bv-modal-title');"
+                v-on:keyup.enter="addOption()"
                 type="text"
-                required
                 placeholder="Enter Option"
                 v-model="form.opt1"
               ></b-form-input>
@@ -26,7 +33,7 @@
           <div v-if="deleteOptModal">
             <p>
               Title :
-              <span class="text-danger">{{pollData[editIndex].title}}</span>
+              <span class="text-danger text-break">{{pollData[editIndex].title}}</span>
             </p>
             <div v-for="(option,optIndex) in pollData[editIndex].options" :key="optIndex">
               <b-form-radio
@@ -42,21 +49,11 @@
           </div>
         </b-form>
         <div v-if="!deleteOptModal">
-          <b-button
-            v-if="modalTitle"
-            variant="info"
-            class="mt-3"
-            @click="update();$bvModal.hide('bv-modal-title');"
-          >
+          <b-button v-if="modalTitle" variant="info" class="mt-3" @click="update">
             <b-spinner class="mx-3" small v-if="updateTitleLoading"></b-spinner>
             <span v-if="!updateTitleLoading">Update</span>
           </b-button>
-          <b-button
-            v-if="!modalTitle"
-            variant="info"
-            class="mt-3"
-            @click="addOption();$bvModal.hide('bv-modal-title');"
-          >
+          <b-button v-if="!modalTitle" variant="info" class="mt-3" @click="addOption">
             <b-spinner class="mx-2" small v-if="addOptLoading"></b-spinner>
             <span v-if="!addOptLoading">Add</span>
           </b-button>
@@ -111,18 +108,18 @@
           <div v-if="loginRoles==='admin'" class="d-flex justify-content-end flex-wrap">
             <b-button
               variant="outline-primary"
-              @click="openModalTitle(index);$bvModal.show('bv-modal-title')"
+              @click="openModalTitle(index)"
               class="m-2"
             >Edit Title</b-button>
             <b-button
               variant="outline-primary"
-              @click="openModalOpt(index);$bvModal.show('bv-modal-title')"
+              @click="openModalOpt(index)"
               class="m-2"
               v-if="poll.options.length <4"
             >New Option</b-button>
             <b-button
               variant="outline-danger"
-              @click="openModalDeleteOpt(index);$bvModal.show('bv-modal-title')"
+              @click="openModalDeleteOpt(index)"
               class="m-2"
             >Delete Option</b-button>
             <b-button variant="outline-danger" Button @click="deletePoll(index)" class="m-2">
@@ -208,8 +205,17 @@ export default {
       "updateTitleLoading",
       "deletePollLoading",
       "deleteOptLoading",
-      "addOptLoading"
-    ])
+      "addOptLoading",
+      "modalError"
+    ]),
+    ModalShow: {
+      get() {
+        return this.$store.state.pollData.modalShow;
+      },
+      set(val) {
+        return this.clearModal(val);
+      }
+    }
   }
 };
 </script>

@@ -11,9 +11,12 @@ const state = {
 }
 
 const actions = {
-    async addUser() {
+    async addUser({ dispatch }) {
+        let res = await dispatch('validUsername')
         if (state.signup.username == "" || state.signup.password == "" || state.signup.role == null) {
             state.signUpError = "* Fill Required Details";
+        } else if (!res) {
+            state.signUpError = "*Invalid Username";
         } else {
             var payload = {
                 username: state.signup.username,
@@ -44,6 +47,11 @@ const actions = {
         state.signup.password = "";
         state.signUpError = "";
         router.push("/signup");
+    },
+    validUsername({ state }) {
+        //eslint-disable-next-line
+        var re = /^[a-zA-Z0-9]+$/;
+        return re.test(state.signup.username);
     }
 }
 

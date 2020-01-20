@@ -19,6 +19,8 @@ const state = {
     deletePollLoading: false,
     deleteOptLoading: false,
     addOptLoading: false,
+    modalError: "",
+    modalShow: false
 }
 
 const actions = {
@@ -117,64 +119,97 @@ const actions = {
         state.deletePollLoading = false;
     },
     async delete_opt({ state, dispatch }) {
-        state.deleteOptLoading = true;
-        await axios.delete(`https://secure-refuge-14993.herokuapp.com/delete_poll_option?id=${state.pollData[state.editIndex]._id}&option_text=${state.pollData[state.editIndex].options[state.optIndex].option}`).then(response => {
-            if (response.status === 200) {
-                dispatch('getPoll');
-                state.takeError = "";
-            }
-        }).catch(function (error) {
-            state.takeError = error;
-        });
-        state.deleteOptLoading = false;
+        //eslint-disable-next-line
+        console.log(state.optIndex);
+        if (state.optIndex === "") {
+            state.modalError = "*Select option"
+        } else {
+            state.deleteOptLoading = true;
+            await axios.delete(`https://secure-refuge-14993.herokuapp.com/delete_poll_option?id=${state.pollData[state.editIndex]._id}&option_text=${state.pollData[state.editIndex].options[state.optIndex].option}`).then(response => {
+                if (response.status === 200) {
+                    dispatch('getPoll');
+                    state.takeError = "";
+                    state.modalError = ""
+                }
+            }).catch(function (error) {
+                state.takeError = error;
+            });
+            state.deleteOptLoading = false;
+            state.optIndex = "";
+        }
     },
     async updateTitle({ state, dispatch }) {
-        state.updateTitleLoading = true;
-        await axios.post(`https://secure-refuge-14993.herokuapp.com/update_poll_title?id=${state.pollData[state.editIndex]._id}&title=${state.form.question}`).then(response => {
-            if (response.status === 200) {
-                dispatch('getPoll');
-                state.form.question = "";
-                state.takeError = "";
-            }
-        }).catch(function (error) {
-            state.takeError = error;
-        });
-        state.updateTitleLoading = false;
+        if (state.form.question === "") {
+            state.modalError = "* Title can't be empty"
+        }
+        else {
+            state.updateTitleLoading = true;
+            await axios.post(`https://secure-refuge-14993.herokuapp.com/update_poll_title?id=${state.pollData[state.editIndex]._id}&title=${state.form.question}`).then(response => {
+                if (response.status === 200) {
+                    dispatch('getPoll');
+                    state.form.question = "";
+                    state.takeError = "";
+                }
+            }).catch(function (error) {
+                state.takeError = error;
+            });
+            state.updateTitleLoading = false;
+            state.modalShow = false;
+        }
     },
     openModal_title({ state }, index) {
         state.modalTitle = true;
         state.form.question = state.pollData[index].title;
         state.editIndex = index;
+        state.modalShow = true;
+        state.modalError = "";
     },
     openModal_opt({ state }, index) {
         state.modalTitle = false;
         state.editIndex = index;
+        state.modalShow = true;
+        state.modalError = "";
     },
     openModal_deleteOpt({ state }, index) {
         state.deleteOptModal = true;
         state.editIndex = index;
+        state.modalShow = true;
+        state.modalError = "";
     },
     async add_option({ state, dispatch }) {
-        state.addOptLoading = true;
-        await axios.post(`https://secure-refuge-14993.herokuapp.com/add_new_option?id=${state.pollData[state.editIndex]._id}&option_text=${state.form.opt1}`).then(response => {
-            if (response.status === 200) {
-                dispatch('getPoll');
-                state.form.opt1 = "";
-                state.takeError = "";
-            }
-        }).catch(function (error) {
-            state.takeError = error;
-        });
-        state.addOptLoading = false;
+        if (state.form.opt1 === "") {
+            state.modalError = "*Option cann't be empty"
+            state.addOptLoading = false;
+        } else {
+            state.addOptLoading = true;
+            await axios.post(`https://secure-refuge-14993.herokuapp.com/add_new_option?id=${state.pollData[state.editIndex]._id}&option_text=${state.form.opt1}`).then(response => {
+                if (response.status === 200) {
+                    dispatch('getPoll');
+                    state.form.opt1 = "";
+                    state.takeError = "";
+                }
+            }).catch(function (error) {
+                state.takeError = error;
+            });
+            state.addOptLoading = false;
+            state.modalShow = false;
+        }
     },
     select_radio({ state }, optIndexs) {
         state.optIndex = optIndexs;
     },
-    clear_modal() {
+    clear_modal({ state }, value) {
         state.form.question = "";
         state.form.opt1 = "";
         state.deleteOptModal = false;
-    }
+        state.modalShow = value;
+        state.modalError = "";
+    },
+    validEmail(email) {
+        //eslint-disable-next-line
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
+    },
 
 }
 

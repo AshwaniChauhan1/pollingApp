@@ -11,9 +11,13 @@ const state = {
 }
 const actions = {
     async loginUser({ dispatch }) {
+        let res = await dispatch('validUsername')
         if (state.login.username === "" || state.login.password === "") {
             state.loginError = "* Fill Required Details";
-        } else {
+        } else if (!res) {
+            state.loginError = "*Invalid Username";
+        }
+        else {
             state.loginLoading = true;
             await axios.post(`https://secure-refuge-14993.herokuapp.com/login?username=${state.login.username}&password=${state.login.password}`).then(response => {
                 if (response.status === 200 && response.data.error === 0) {
@@ -51,7 +55,12 @@ const actions = {
         localStorage.vote = "";
         localStorage.loginRole = "";
         router.push("/login");
-    }
+    },
+    validUsername({ state }) {
+        //eslint-disable-next-line
+        var re = /^[a-zA-Z0-9]+$/;
+        return re.test(state.login.username);
+    },
 }
 
 export default ({
