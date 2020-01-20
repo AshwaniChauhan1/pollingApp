@@ -6,7 +6,7 @@
     <b-container>
       <b-row class="justify-content-lg-center">
         <b-col lg="6">
-          <b-form class="p-5">
+          <b-form class="p-5" @submit.prevent >
             <p class="text-danger">{{loginError}}</p>
             <b-form-group label="Username:">
               <b-form-input
@@ -25,7 +25,7 @@
               ></b-form-input>
             </b-form-group>
             <b-button type="submit" @click="loginUser" variant="info">
-              <b-spinner small v-if="loginLoading"></b-spinner>
+              <b-spinner class="mx-2" small v-if="loginLoading"></b-spinner>
               <span v-if="!loginLoading">login</span>
             </b-button>
           </b-form>
@@ -48,3 +48,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+b-button{
+  width:500px;
+}
+</style>

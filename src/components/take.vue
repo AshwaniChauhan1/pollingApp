@@ -36,7 +36,7 @@
               >{{option.option}}</b-form-radio>
             </div>
             <b-button variant="info" class="mt-3" @click="deleteOpt">
-              <b-spinner small v-if="deleteOptLoading"></b-spinner>
+              <b-spinner class="mx-3" small v-if="deleteOptLoading"></b-spinner>
               <span v-if="!deleteOptLoading">Delete</span>
             </b-button>
           </div>
@@ -48,7 +48,7 @@
             class="mt-3"
             @click="update();$bvModal.hide('bv-modal-title');"
           >
-            <b-spinner small v-if="updateTitleLoading"></b-spinner>
+            <b-spinner class="mx-3" small v-if="updateTitleLoading"></b-spinner>
             <span v-if="!updateTitleLoading">Update</span>
           </b-button>
           <b-button
@@ -57,7 +57,7 @@
             class="mt-3"
             @click="addOption();$bvModal.hide('bv-modal-title');"
           >
-            <b-spinner small v-if="addOptLoading"></b-spinner>
+            <b-spinner class="mx-2" small v-if="addOptLoading"></b-spinner>
             <span v-if="!addOptLoading">Add</span>
           </b-button>
         </div>
@@ -126,7 +126,7 @@
               class="m-2"
             >Delete Option</b-button>
             <b-button variant="outline-danger" Button @click="deletePoll(index)" class="m-2">
-              <b-spinner small v-if="deletePollLoading"></b-spinner>
+              <b-spinner class="mx-4" small v-if="deletePollLoading"></b-spinner>
               <span v-if="!deletePollLoading">Delete Poll</span>
             </b-button>
           </div>

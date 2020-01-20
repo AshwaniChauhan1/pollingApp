@@ -36,6 +36,7 @@ const actions = {
                 state.signUpError = error;
             });
             state.signupLoading = false;
+
         }
     },
     routeSignup() {

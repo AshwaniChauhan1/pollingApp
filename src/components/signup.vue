@@ -6,7 +6,7 @@
     <b-container>
       <b-row class="justify-content-lg-center">
         <b-col lg="6">
-          <b-form class="p-5">
+          <b-form class="p-5" @submit.prevent>
             <p class="text-danger">{{signUpError}}</p>
             <b-form-group label="Username:">
               <b-form-input
@@ -28,7 +28,7 @@
               <b-form-select v-model="signup.role" :options="options"></b-form-select>
             </b-form-group>
             <b-button type="submit" @click="add_user" variant="info">
-              <b-spinner small v-if="signupLoading"></b-spinner>
+              <b-spinner class="mx-3" small v-if="signupLoading"></b-spinner>
               <span v-if="!signupLoading">SignUp</span>
             </b-button>
           </b-form>
