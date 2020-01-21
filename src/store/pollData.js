@@ -1,7 +1,7 @@
 import router from "../router";
 import axios from "axios";
 const state = {
-    form: { question: "", opt1: "", opt2: "", opt3: "", opt4: "" },
+    form: { question: "", opt1: "" },
     poll: {},
     pollData: [],
     editIndex: "",
@@ -20,7 +20,9 @@ const state = {
     deleteOptLoading: false,
     addOptLoading: false,
     modalError: "",
-    modalShow: false
+    modalShow: false,
+    createOptions: [{ opt: "" }],
+    option: {}
 }
 
 const actions = {
@@ -28,7 +30,10 @@ const actions = {
         router.push("/take")
     },
     routeCreate() {
-        state.form = { question: "", opt1: "", opt2: "", opt3: "", opt4: "" };
+        for (let i = 0; i < state.createOptions.length; i++) {
+            state.createOptions[i].opt = "";
+        }
+        state.form = { question: "" };
         router.push("/create")
     },
     routeView() {
@@ -39,28 +44,55 @@ const actions = {
             router.push("/")
         }
     },
-    async create_poll() {
-        if (state.form.question == "" || state.form.opt1 == "" || state.form.opt2 == "" || state.form.opt3 == "" || state.form.opt4 == "") {
-            state.errors = "*Fill Required Details";
+    addCreate_poll() {
+        state.option = {
+            opt: ""
+        };
+        state.createOptions.push(state.option);
+    },
+    deleteCreate_poll() {
+        state.createOptions.pop();
+    },
+    async create_poll({ state }) {
+        if (state.form.question === "") {
+            state.createError = "*Fill Title";
         } else {
-            var payload = {
-                title: state.form.question,
-                opt1: state.form.opt1,
-                opt2: state.form.opt2,
-                opt3: state.form.opt3,
-                opt4: state.form.opt4
-            }
-            state.createLoading = true;
-            await axios.post(`https://secure-refuge-14993.herokuapp.com/add_poll?title=${payload.title}&options=${payload.opt1}____${payload.opt2}____${payload.opt3}____${payload.opt4}`, payload).then(response => {
-                if (response.status === 200) {
-                    router.push("/view");
-                    state.form = { question: "", opt1: "", opt2: "", opt3: "", opt4: "" };
-                    state.createError = "";
+            for (let i = 0; i < state.createOptions.length; i++) {
+                if (state.createOptions[i].opt === "") {
+                    state.createError = "*Fill Option"
                 }
-            }).catch(function (error) {
-                state.createError = error;
-            });
-            state.createLoading = false;
+                else {
+                    state.createError = ""
+                }
+            }
+            if (state.createError === "") {
+                var concatOpt = ""
+                for (let a = 0; a < state.createOptions.length; a++) {
+                    if (a > 0) {
+                        var apiOpt = "____" + state.createOptions[a].opt;
+                    } else {
+                        apiOpt = state.createOptions[a].opt
+                    }
+                    concatOpt = concatOpt.concat(apiOpt);
+                }
+                var addPollUrl = 'https://secure-refuge-14993.herokuapp.com/add_poll?title=' + state.form.question + ' &options=' + concatOpt
+                state.createLoading = true;
+                state.createError = "";
+                await axios.post(addPollUrl).then(response => {
+                    if (response.status === 200) {
+                        router.push("/view");
+                        state.form = { question: "" };
+                        state.createError = "";
+                        for (let i = 0; i < state.createOptions.length; i++) {
+                            state.createOptions[i].opt = "";
+                        }
+                    }
+                }).catch(function (error) {
+                    state.createError = error;
+                });
+                state.createLoading = false;
+            }
+
         }
     },
     getPoll() {
@@ -119,8 +151,6 @@ const actions = {
         state.deletePollLoading = false;
     },
     async delete_opt({ state, dispatch }) {
-        //eslint-disable-next-line
-        console.log(state.optIndex);
         if (state.optIndex === "") {
             state.modalError = "*Select option"
         } else {

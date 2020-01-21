@@ -16,22 +16,41 @@
                 v-model="form.question"
               ></b-form-input>
             </b-form-group>
-            <b-form-group label="Option 1 :">
-              <b-form-input type="text" required placeholder="Enter Option 1" v-model="form.opt1"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Option 2 :">
-              <b-form-input type="text" required placeholder="Enter Option 2" v-model="form.opt2"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Option 3 :">
-              <b-form-input type="text" required placeholder="Enter Option 3" v-model="form.opt3"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Option 4 :">
-              <b-form-input type="text" required placeholder="Enter Option 4" v-model="form.opt4"></b-form-input>
-            </b-form-group>
-            <b-button type="submit" @click="createPoll" variant="info">
-              <b-spinner class="mx-3" small v-if="createLoading"></b-spinner>
-              <span v-if="!createLoading">Submit</span>
-            </b-button>
+            <div v-for="(createOption,index) in createOptions" :key="index">
+              <b-form-group label="Option">
+                <b-form-input
+                  type="text"
+                  required
+                  placeholder="Enter Option"
+                  v-model="createOption.opt"
+                ></b-form-input>
+              </b-form-group>
+            </div>
+            <div class="d-flex justify-content-end">
+              <b-button
+                type="submit"
+                @click="createPoll"
+                v-if="!createLoading"
+                variant="info"
+                class="mx-2"
+              >
+                <span>Submit</span>
+              </b-button>
+              <b-button type="submit" variant="info" class="mx-2" v-if="createLoading">
+                <b-spinner class="mx-3" small></b-spinner>
+              </b-button>
+              <b-button
+                class="mx-2"
+                v-if="createOptions.length !== 1"
+                @click="deleteCreateOption"
+                variant="danger"
+              >
+                <span>Delete Option</span>
+              </b-button>
+              <b-button @click="addCreateOption" variant="info">
+                <span>Add Option</span>
+              </b-button>
+            </div>
           </b-form>
         </b-col>
       </b-row>
@@ -42,12 +61,22 @@
 import { mapState, mapActions } from "vuex";
 export default {
   name: "create",
+  data() {
+    return {};
+  },
   computed: {
-    ...mapState("pollData", ["form", "createError", "createLoading"])
+    ...mapState("pollData", [
+      "form",
+      "createError",
+      "createLoading",
+      "createOptions"
+    ])
   },
   methods: {
     ...mapActions({
-      createPoll: "pollData/create_poll"
+      createPoll: "pollData/create_poll",
+      addCreateOption: "pollData/addCreate_poll",
+      deleteCreateOption: "pollData/deleteCreate_poll"
     })
   }
 };

@@ -111,12 +111,7 @@
               @click="openModalTitle(index)"
               class="m-2"
             >Edit Title</b-button>
-            <b-button
-              variant="outline-primary"
-              @click="openModalOpt(index)"
-              class="m-2"
-              v-if="poll.options.length <4"
-            >New Option</b-button>
+            <b-button variant="outline-primary" @click="openModalOpt(index)" class="m-2">New Option</b-button>
             <b-button
               variant="outline-danger"
               @click="openModalDeleteOpt(index)"
@@ -149,10 +144,8 @@ export default {
   },
   methods: {
     setValue(index) {
-      if (index === 0) return "a";
-      if (index === 1) return "b";
-      if (index === 2) return "c";
-      if (index === 3) return "d";
+      var alphabet = String.fromCharCode(97 + index);
+      return alphabet;
     },
     ...mapActions({
       viewPoll: "pollData/getPoll",

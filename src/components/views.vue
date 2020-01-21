@@ -47,10 +47,8 @@ export default {
   },
   methods: {
     setValue(index) {
-      if (index === 0) return "a";
-      if (index === 1) return "b";
-      if (index === 2) return "c";
-      if (index === 3) return "d";
+      var alphabet = String.fromCharCode(97 + index);
+      return alphabet;
     },
     ...mapActions({
       GetPoll: "pollData/getPoll"
