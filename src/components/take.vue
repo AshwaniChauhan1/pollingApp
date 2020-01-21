@@ -42,7 +42,12 @@
                 class="py-2"
               >{{option.option}}</b-form-radio>
             </div>
-            <b-button variant="info" class="mt-3" @click="deleteOpt">
+            <b-button
+              variant="info"
+              class="mt-3"
+              @click="deleteOpt"
+              v-if="pollData[editIndex].options.length > 1"
+            >
               <b-spinner class="mx-3" small v-if="deleteOptLoading"></b-spinner>
               <span v-if="!deleteOptLoading">Delete</span>
             </b-button>
@@ -116,6 +121,7 @@
               variant="outline-danger"
               @click="openModalDeleteOpt(index)"
               class="m-2"
+              v-if="pollData[index].options.length>1"
             >Delete Option</b-button>
             <b-button variant="outline-danger" Button @click="deletePoll(index)" class="m-2">
               <b-spinner class="mx-4" small v-if="deletePollLoading"></b-spinner>
