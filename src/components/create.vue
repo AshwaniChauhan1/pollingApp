@@ -17,7 +17,7 @@
               ></b-form-input>
             </b-form-group>
             <div v-for="(createOption,index) in createOptions" :key="index">
-              <b-form-group label="Option">
+              <b-form-group :label="'Option'+ String(index+1)">
                 <b-form-input
                   type="text"
                   required
